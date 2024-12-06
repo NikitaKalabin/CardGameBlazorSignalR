@@ -1,0 +1,26 @@
+﻿
+
+@if (Value is not null)
+{
+    <a class="p-card rank-@Value.Name @Value.Suit" @onclick="OnCardClick" href="#">
+        <span class="rank">@Value.Name</span>
+        <span class="suit"></span>
+    </a>
+}
+
+
+@code {
+    [Parameter]
+    public Card? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Card> OnCardClicked { get; set; }
+
+    private async Task OnCardClick()
+    {
+        if (OnCardClicked.HasDelegate)
+        {
+            await OnCardClicked.InvokeAsync(Value);
+        }
+    }
+}

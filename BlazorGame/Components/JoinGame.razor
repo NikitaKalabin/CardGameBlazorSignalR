@@ -1,0 +1,49 @@
+﻿<h3>@FormTitle</h3>
+
+<p class="text-muted">@FormHelpText</p>
+
+<EditForm Model="@model" OnValidSubmit="@OnSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <label for="username" class="font-weight-bold mr-2">Username</label>
+            <input type="text" class="form-control" id="username-input" aria-describedby="username-help" @bind-value="model.Username">
+            <small id="username-help" class="form-text text-muted">Enter a username.</small>
+        </div>
+        <div class="col-auto">
+            <label for="pin-input" class="font-weight-bold mr-2">PIN</label>
+            <input type="number" class="form-control" id="pin-input" aria-describedby="pin-help" maxlength="4" @bind-value="model.PINCode">
+            <small id="pin-help" class="form-text text-muted">Enter a 4-digit PIN code for this game.</small>
+        </div>
+        <div class="col-auto">
+            <button type="submit" id="join-button" class="btn btn-primary mb-2">Go!</button>
+        </div>
+    </div> 
+</EditForm>
+
+@code {
+    public JoinGameModel model { get; set; } = new();
+
+    [Parameter]
+    public Guid? GameId { get; set; }
+
+    [Parameter]
+    public EventCallback<JoinGameModel> OnJoinedGame { get; set; }
+
+    private string FormTitle => model.Mode == JoinMode.CreateNew ? "Create a new game" : "Join an existing game";
+    private string FormHelpText => model.Mode == JoinMode.CreateNew ? "Create a new game and invite others to join using a PIN code." 
+        : "Enter the PIN code you were provided to enter the game."; 
+
+    protected override void OnParametersSet()
+    {
+        model.Mode = GameId.HasValue ? JoinMode.JoinExisting : JoinMode.CreateNew;
+    }
+
+    private async Task OnSubmit()
+    {
+        await OnJoinedGame.InvokeAsync(model);
+        model = new();
+    }
+}

@@ -1,0 +1,58 @@
+﻿@page "/"
+
+@implements IDisposable
+@using BlazorGame.Components
+
+@if (ShowEntryScreen)
+{
+    <JoinGame OnJoinedGame="OnJoinGame" GameId="gameId"></JoinGame>
+}
+else
+{
+    <div class="alert alert-info">
+        <h3>PIN code: @_gameState.PinCode</h3>
+        <p>This <a href="@GameUrl">game link</a> allows other people to join the game.</p>
+    </div>
+
+    <button type="button" class="btn btn-warning mb-2" @onclick="OnLeaveGame">Leave Game</button>
+
+    <hr />
+
+    <h4 class="text-info text-center my-3">@TurnMessage</h4>
+
+    if (_gameState.HasDealtCards)
+    {
+        @if (ShowHand)
+        {
+            <div class="d-flex justify-content-center mt-5">
+                @foreach (var card in MyHand!.Cards)
+                {
+                    <PlayingCard Value="@card" OnCardClicked="OnCardClicked"></PlayingCard>
+                }
+            </div>
+        }
+
+        <div class="d-flex justify-content-center mt-5">
+            <PlayedCards Game="_gameState"></PlayedCards>
+        </div>
+
+        if (CanPlayAgain)
+        {
+            <div class="text-center">
+                <button type="button" @onclick="OnNewGame" class="mt-5 btn btn-primary">Play Again</button>
+            </div>
+        }
+        else if (CanMoveNext)
+        {
+            <div class="text-center">
+                <button type="button" @onclick="OnPlayNext" class="mt-5 btn btn-info">Next Turn</button>
+            </div>
+        }
+    }
+    else if (CanDealCards)  
+    {
+        <div class="text-center">
+            <button type="button" @onclick="OnDealCards" class="mt-5 btn btn-info">Deal</button>
+        </div>
+    }
+}
