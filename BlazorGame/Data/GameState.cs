@@ -196,6 +196,8 @@ namespace BlazorGame.Data
         public string Name { get; set; }
         public string Color { get; set; }
         public string Suit { get; set; }
+        
+        public List<string> WinCards { get; set; }
     }
 
     public class Player
