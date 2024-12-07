@@ -23,6 +23,7 @@ namespace BlazorGame.Models
 
         public PlayedCard? UpCard { get; init; }
         public PlayedCard? MatchingCard { get; init; }
+        
 
         public bool CanPlayNextCard => UpCard?.Card is not null && MatchingCard?.Card is not null;
 
@@ -36,5 +37,5 @@ namespace BlazorGame.Models
         public List<CardHand> Hands { get; }
     }
 
-    public record PlayedCard(Card Card, string Player);
+    public record PlayedCard(Card Card, Player Player);
 }

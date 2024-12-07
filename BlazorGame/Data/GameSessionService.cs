@@ -122,8 +122,8 @@ namespace BlazorGame.Data
         {
             return new GameStateModel(game)
             {
-                UpCard = new(game.Upcard, game.GetPlayerName(game.ActivePlayerId)),
-                MatchingCard = new(game.MatchingCard, game.GetPlayerName(game.MatchingPlayerId))
+                UpCard = new(game.Upcard, game.GetPlayerById(game.ActivePlayerId)),
+                MatchingCard = new(game.MatchingCard, game.GetPlayerById(game.MatchingPlayerId))
             };
         }
 

@@ -189,6 +189,12 @@ namespace BlazorGame.Data
             var player = Players.FirstOrDefault(x => x.UserId == userId);
             return player is null ? "" : player.Name;
         }
+        
+        public Player? GetPlayerById(string userId)
+        {
+            var player = Players.FirstOrDefault(x => x.UserId == userId);
+            return player;
+        }
     }
 
     public class Card
