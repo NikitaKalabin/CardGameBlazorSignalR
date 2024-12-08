@@ -1,41 +1,39 @@
-﻿using BlazorGame.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using BlazorGame.Data;
+using BlazorGame.Models;
 
-namespace BlazorGame.Models
+public record GameStateModel
 {
-    public enum GameRole { Creator = 1, Player = 2 };
-    
-    public record GameStateModel
+    private readonly Game _game;
+
+    public GameStateModel(Game game)
     {
-        public GameStateModel(Game game)
-        {
-
-            GameSessionId = game!.Id;
-            HasDealtCards = game.HasDealtCards;
-            IsComplete = game.IsComplete;
-            ActivePlayerId = game.ActivePlayerId;
-            GameCreatorId = game.GameCreatorId;
-            GameCreatorName = game.GameCreatorName;
-            PinCode = game.PinCode;
-            Hands = game.Hands;
-        }
-
-        public PlayedCard? UpCard { get; init; }
-        public PlayedCard? MatchingCard { get; init; }
-        
-
-        public bool CanPlayNextCard => UpCard?.Card is not null && MatchingCard?.Card is not null;
-
-        public Guid GameSessionId { get; }
-        public bool HasDealtCards { get; }
-        public bool IsComplete { get; }
-        public string ActivePlayerId { get; }
-        public string GameCreatorId { get; }
-        public string GameCreatorName { get; }
-        public int PinCode { get; }
-        public List<CardHand> Hands { get; }
+        _game = game;
+        GameSessionId = game.Id;
+        HasDealtCards = game.HasDealtCards;
+        IsComplete = game.Players.All(p => !p.Hand.Any());
+        GameCreatorId = game.GameCreatorId;
+        GameCreatorName = game.GameCreatorName;
+        PinCode = game.PinCode;
+        Hands = game.Hands;
+        PlayedCards = game.PlayedCards;
+        ReadyForNextTurn = game.ReadyForNextTurn;
     }
 
-    public record PlayedCard(Card Card, Player Player);
+    public Guid GameSessionId { get; }
+    public bool HasDealtCards { get; }
+    public bool IsComplete { get; }
+    public string GameCreatorId { get; }
+    public string GameCreatorName { get; }
+    public int PinCode { get; }
+    public List<CardHand> Hands { get; }
+    public Dictionary<string, Card> PlayedCards { get; }
+    public bool ReadyForNextTurn { get; }
+
+    public string GetPlayerName(string playerId)
+    {
+        return _game.Players.Single(x => x.UserId == playerId).Name;
+    }
 }

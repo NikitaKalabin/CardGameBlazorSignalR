@@ -31,41 +31,40 @@ namespace BlazorGame.Pages
                     : false;
 
         bool CanPlayAgain => _gameState.IsComplete && _gameState?.GameCreatorId == UserId;
-        bool CanMoveNext => _gameState.CanPlayNextCard && _gameState?.GameCreatorId == UserId;
         bool ShowEntryScreen => _gameState == null;
         bool ShowHand => MyHand != null && MyHand.Cards.Any();
 
-        string TurnMessage
-        {
-            get
-            {
-                if ((bool)(_gameState?.HasDealtCards))
-                {
-                    if (_gameState.UpCard?.Card is null)
-                    {
-                        return _gameState.ActivePlayerId == UserId ? "It's your turn to lead with a card" :
-                            $"Waiting for {_gameState.UpCard.Player} to lead with a card";
-                    }
-                    else if(_gameState.MatchingCard?.Card is null)
-                    {
-                        return _gameState.ActivePlayerId == UserId ? "Waiting for the player with the matching card" :
-                            "Can you play a matching card from your hand?";
-                    }
-                    else
-                    {
-                        return _gameState.IsComplete ? "Game is complete" : "Cards are matched.";
-                    }
-                }
-                else if(CanDealCards)
-                {
-                    return _gameState?.GameCreatorId == UserId ? "Deal the cards to begin the game"
-                        : $"Waiting for {_gameState.GameCreatorName} to deal the cards";
-                } else
-                {
-                    return "Waiting for the game to start.";
-                }
-            }
-        }
+        // string TurnMessage
+        // {
+        //     get
+        //     {
+        //         if ((bool)(_gameState?.HasDealtCards))
+        //         {
+        //             if (_gameState.UpCard?.Card is null)
+        //             {
+        //                 return _gameState.ActivePlayerId == UserId ? "It's your turn to lead with a card" :
+        //                     $"Waiting for {_gameState.UpCard.Player} to lead with a card";
+        //             }
+        //             else if(_gameState.MatchingCard?.Card is null)
+        //             {
+        //                 return _gameState.ActivePlayerId == UserId ? "Waiting for the player with the matching card" :
+        //                     "Can you play a matching card from your hand?";
+        //             }
+        //             else
+        //             {
+        //                 return _gameState.IsComplete ? "Game is complete" : "Cards are matched.";
+        //             }
+        //         }
+        //         else if(CanDealCards)
+        //         {
+        //             return _gameState?.GameCreatorId == UserId ? "Deal the cards to begin the game"
+        //                 : $"Waiting for {_gameState.GameCreatorName} to deal the cards";
+        //         } else
+        //         {
+        //             return "Waiting for the game to start.";
+        //         }
+        //     }
+        // }
 
         Lazy<DotNetObjectReference<Game>> _serverReference
         {

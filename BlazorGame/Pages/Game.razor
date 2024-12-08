@@ -18,9 +18,9 @@ else
 
     <hr />
 
-    <h4 class="text-info text-center my-3">@TurnMessage</h4>
+    //<h4 class="text-info text-center my-3">@TurnMessage</h4>
 
-    if (_gameState.HasDealtCards)
+    @if (_gameState.HasDealtCards)
     {
         @if (ShowHand)
         {
@@ -36,13 +36,39 @@ else
             <PlayedCards UserId="@UserId" GameStateModel="_gameState"></PlayedCards>
         </div>
 
-        if (CanPlayAgain)
+        @if (_gameState.PlayedCards.Any())
+        {
+            <div class="text-center mt-5">
+                @if (!_gameState.ReadyForNextTurn)
+                {
+                    <h5>Your Played Card:</h5>
+                    @foreach (var playedCard in _gameState.PlayedCards.Where(pc => pc.Key == UserId))
+                    {
+                        <div>
+                            <strong>@_gameState.GetPlayerName(playedCard.Key):</strong> @playedCard.Value.Name
+                        </div>
+                    }
+                }
+                else
+                {
+                    <h5>Played Cards:</h5>
+                    @foreach (var playedCard in _gameState.PlayedCards)
+                    {
+                        <div>
+                            <strong>@_gameState.GetPlayerName(playedCard.Key):</strong> @playedCard.Value.Name
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+        @if (CanPlayAgain)
         {
             <div class="text-center">
                 <button type="button" @onclick="OnNewGame" class="mt-5 btn btn-primary">Play Again</button>
             </div>
         }
-        else if (CanMoveNext)
+        else if (_gameState.ReadyForNextTurn)
         {
             <div class="text-center">
                 <button type="button" @onclick="OnPlayNext" class="mt-5 btn btn-info">Next Turn</button>
