@@ -1,5 +1,4 @@
-﻿
-class Game {
+﻿class Game {
     _razorServer;
     _signalR;
 
