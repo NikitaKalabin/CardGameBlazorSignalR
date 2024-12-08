@@ -178,7 +178,7 @@ namespace BlazorGame.Pages
         
         public string GetUserNameById(string userId)
         {
-            var playerName = _gameService.GetPlayerNameById(UserId, CurrentGameId, _gameState.PinCode).Result;
+            var playerName = _gameService.GetPlayerNameById(userId, CurrentGameId, _gameState.PinCode).Result;
             return playerName;
         }
         
