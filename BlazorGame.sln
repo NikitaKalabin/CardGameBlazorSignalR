@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{689D645A
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGame.Tests", "BlazorGame.Tests\BlazorGame.Tests.csproj", "{B659ACAD-0DED-4359-97A2-1ABEC712D698}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGame", "BlazorGame\BlazorGame.csproj", "{6BFDAC74-D321-4A24-B75D-DF05F4713398}"
 EndProject
 Global
@@ -18,10 +16,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B659ACAD-0DED-4359-97A2-1ABEC712D698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B659ACAD-0DED-4359-97A2-1ABEC712D698}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B659ACAD-0DED-4359-97A2-1ABEC712D698}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B659ACAD-0DED-4359-97A2-1ABEC712D698}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6BFDAC74-D321-4A24-B75D-DF05F4713398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BFDAC74-D321-4A24-B75D-DF05F4713398}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BFDAC74-D321-4A24-B75D-DF05F4713398}.Release|Any CPU.ActiveCfg = Release|Any CPU

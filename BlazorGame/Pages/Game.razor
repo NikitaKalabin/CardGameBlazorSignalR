@@ -36,7 +36,7 @@ else
             <PlayedCards UserId="@UserId" GameStateModel="_gameState"></PlayedCards>
         </div>
 
-        @if (_gameState.PlayedCards.Any())
+        @if (_gameState.PlayedCards.Any() && !_gameState.IsComplete)
         {
             <div class="text-center mt-5">
                 @if (!_gameState.ReadyForNextTurn)
@@ -45,7 +45,7 @@ else
                     @foreach (var playedCard in _gameState.PlayedCards.Where(pc => pc.Key == UserId))
                     {
                         <div>
-                            <strong>@_gameState.GetPlayerName(playedCard.Key):</strong> @playedCard.Value.Name
+                            <strong>@GetUserNameById(playedCard.Key):</strong> @playedCard.Value.Name
                         </div>
                     }
                 }
@@ -55,13 +55,24 @@ else
                     @foreach (var playedCard in _gameState.PlayedCards)
                     {
                         <div>
-                            <strong>@_gameState.GetPlayerName(playedCard.Key):</strong> @playedCard.Value.Name
+                            <strong>@(_ = GetUserNameById(playedCard.Key)):</strong> @playedCard.Value.Name
                         </div>
+                    }
+
+                    if (_gameState.TurnWinnerId is not null)
+                    {
+                        <div><strong>Player @GetUserNameById(_gameState.TurnWinnerId) WIN this round</strong></div>
                     }
                 }
             </div>
         }
-
+        @if (_gameState.IsComplete)
+        {
+            <div class="text-center mt-5">
+                <h4>Game Over</h4>
+                <h5>Winner: @GetWinnerOfTheGame()</h5>
+            </div>
+        }
         @if (CanPlayAgain)
         {
             <div class="text-center">

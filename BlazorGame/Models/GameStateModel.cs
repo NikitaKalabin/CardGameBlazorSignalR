@@ -27,13 +27,9 @@ public record GameStateModel
     public bool IsComplete { get; }
     public string GameCreatorId { get; }
     public string GameCreatorName { get; }
+    public string TurnWinnerId => _game.TurnWinnerId;
     public int PinCode { get; }
     public List<CardHand> Hands { get; }
     public Dictionary<string, Card> PlayedCards { get; }
     public bool ReadyForNextTurn { get; }
-
-    public string GetPlayerName(string playerId)
-    {
-        return _game.Players.Single(x => x.UserId == playerId).Name;
-    }
 }
