@@ -164,13 +164,52 @@ namespace BlazorGame.Data
             var player = Players.FirstOrDefault(x => x.UserId == userId);
             return player;
         }
+      
+        public string GetTurnResults(Card card1, Card card2)
+        {
+            if (card1.Name == card2.Name)
+            {
+                return "-1";
+            }
+            
+            foreach (var winCardName in card1.WinCards)
+            {
+                if (card2.Name == winCardName)
+                {
+                    _players.FirstOrDefault(p => p.UserId == card1.Player.UserId).Points++;
+                    return card1.Player.UserId;
+                }
+            }
+            
+            _players.FirstOrDefault(p => p.UserId == card2.Player.UserId).Points++;
+            return card2.Player.UserId;
+        }
+    
+        public string GetGameResults(Player player1, Player player2)
+        {
+            if (player1.Points > player2.Points)
+            {
+                return player1.UserId;
+            }
+
+            if (player2.Points > player1.Points)
+            {
+                return player1.UserId;
+            }
+            
+            return $"-1";
+        }
     }
 
     public class Card
     {
+        public int Id { get; set; }
+        public Player? Player { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public string Suit { get; set; }
+        
+        public List<string> WinCards { get; set; }
     }
 
     public class Player
@@ -179,6 +218,7 @@ namespace BlazorGame.Data
         
         public string Name { get; init; }
         public string UserId { get; init; }
+        public int Points { get; set; } = 0;
 
         public Player(string userId, string name)
         {

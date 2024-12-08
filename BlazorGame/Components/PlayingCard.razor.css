@@ -79,3 +79,25 @@ strong .p-card {
 .p-card.tiger .suit:after {
     content: "🐯";
 }
+
+
+
+.p-card.water .suit:after {
+    content: "💧";
+}
+
+.p-card.fire .suit:after {
+    content: "🔥";
+}
+
+.p-card.ice .suit:after {
+    content: "❄️";
+}
+
+.p-card.earth .suit:after {
+    content: "🌍";
+}
+
+.p-card.light .suit:after {
+    content: "⚡️";
+}
