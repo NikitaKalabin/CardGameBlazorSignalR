@@ -151,7 +151,7 @@ public class GameSessionService
                 .SendAsync("GameStateChanged", gameState);
         }
     }
-    
+
     public async Task<string?> GetPlayerNameById(string userId, Guid gameId, int pinCode)
     {
         if (TryGetGame(gameId, pinCode, out var game))
@@ -170,4 +170,32 @@ public class GameSessionService
         return "User not found or invalid PIN code.";
     }
     
+    public async Task<string?> GetWinnerOfTheGame(string userId, Guid gameId, int pinCode)
+    {
+        if (TryGetGame(gameId, pinCode, out var game))
+        {
+            try
+            {
+                var player1 = game.Players.FirstOrDefault(p => p.UserId == game.GameCreatorId);
+                var player2 = game.Players.FirstOrDefault(p => p.UserId != game.GameCreatorId);
+                if (player2 != null && player1 != null && player1.Points > player2.Points)
+                {
+                    return player1.UserId;
+                }
+
+                if (player1 != null && player2 != null && player2.Points > player1.Points)
+                {
+                    return player1.UserId;
+                }
+        
+                return $"-1";
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message; // Return the error message
+            }
+        }
+
+        return "Game not found or invalid PIN code.";
+    }
 }

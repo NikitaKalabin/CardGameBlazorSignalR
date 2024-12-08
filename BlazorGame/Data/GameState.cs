@@ -28,7 +28,7 @@ namespace BlazorGame.Data
         public string GameWinnerId { get; init; }
         
         public string TurnWinnerId { get; private set; }
-        public string GameCreatorName { get; init; }
+        public string GameCreatorName { get; private set; }
         public bool ReadyForNextTurn => PlayedCards.Count == Players.Count;
         public Dictionary<string, Card> PlayedCards { get; private set; } = new();
         public Game(int pinCode, Player creator, ICardProvider cardProvider)
@@ -55,7 +55,6 @@ namespace BlazorGame.Data
             if (ReadyForNextTurn)
             {
                 TurnWinnerId = GetTurnResults(PlayedCards);
-                //TODO: Implement logic for determining the winner 
             }
         }
 
@@ -190,21 +189,6 @@ namespace BlazorGame.Data
             }
 
             return playedCards.Keys.Last();
-        }
-    
-        public string GetGameResults(Player player1, Player player2)
-        {
-            if (player1.Points > player2.Points)
-            {
-                return player1.UserId;
-            }
-
-            if (player2.Points > player1.Points)
-            {
-                return player1.UserId;
-            }
-            
-            return $"-1";
         }
     }
 

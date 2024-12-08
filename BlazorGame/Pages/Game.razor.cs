@@ -182,6 +182,12 @@ namespace BlazorGame.Pages
             return playerName;
         }
         
+        public string GetWinnerOfTheGame()
+        {
+            var player = _gameService.GetWinnerOfTheGame(UserId, CurrentGameId, _gameState.PinCode).Result;
+            var playerName = GetUserNameById(player);
+            return playerName;
+        }
         
     }
 }
