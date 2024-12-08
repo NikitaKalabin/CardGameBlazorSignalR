@@ -24,6 +24,10 @@ namespace BlazorGame.Data
         public GameStatus State { get; private set; } = GameStatus.None;
         public List<Player> Players { get => _players; }
         public string GameCreatorId { get; init; }
+        
+        public string GameWinnerId { get; init; }
+        
+        public string TurnWinnerId { get; private set; }
         public string GameCreatorName { get; init; }
         public bool ReadyForNextTurn => PlayedCards.Count == Players.Count;
         public Dictionary<string, Card> PlayedCards { get; private set; } = new();
@@ -50,21 +54,8 @@ namespace BlazorGame.Data
             
             if (ReadyForNextTurn)
             {
+                TurnWinnerId = GetTurnResults(PlayedCards);
                 //TODO: Implement logic for determining the winner 
-            }
-        }
-        
-        
-        public string ActivePlayerId
-        {
-            get
-            {
-                if (_currentTurnIndex < 0)
-                    return "";
-
-                _currentTurnIndex %= _players.Count;
-
-                return _players.Skip(_currentTurnIndex).Take(1).First().UserId;
             }
         }
 
@@ -165,24 +156,40 @@ namespace BlazorGame.Data
             return player;
         }
       
-        public string GetTurnResults(Card card1, Card card2)
+        public string GetTurnResults(Dictionary<string, Card> playedCards)
         {
+            if (playedCards.Count != 2)
+            {
+                throw new InvalidOperationException("There must be exactly two played cards to determine the turn result.");
+            }
+
+            var card1 = playedCards.Values.First();
+            var card2 = playedCards.Values.Last();
+
             if (card1.Name == card2.Name)
             {
                 return "-1";
             }
-            
+
             foreach (var winCardName in card1.WinCards)
             {
                 if (card2.Name == winCardName)
                 {
-                    _players.FirstOrDefault(p => p.UserId == card1.Player.UserId).Points++;
-                    return card1.Player.UserId;
+                    var player1 = Players.FirstOrDefault(p => p.UserId == playedCards.Keys.First());
+                    if (player1 != null)
+                    {
+                        player1.Points++;
+                    }
+                    return playedCards.Keys.First();
                 }
             }
-            
-            _players.FirstOrDefault(p => p.UserId == card2.Player.UserId).Points++;
-            return card2.Player.UserId;
+            var player2 = Players.FirstOrDefault(p => p.UserId == playedCards.Keys.Last());
+            if (player2 != null)
+            {
+                player2.Points++;
+            }
+
+            return playedCards.Keys.Last();
         }
     
         public string GetGameResults(Player player1, Player player2)
@@ -204,7 +211,6 @@ namespace BlazorGame.Data
     public class Card
     {
         public int Id { get; set; }
-        public Player? Player { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public string Suit { get; set; }

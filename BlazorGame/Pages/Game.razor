@@ -45,7 +45,7 @@ else
                     @foreach (var playedCard in _gameState.PlayedCards.Where(pc => pc.Key == UserId))
                     {
                         <div>
-                            <strong>@_gameState.GetPlayerName(playedCard.Key):</strong> @playedCard.Value.Name
+                            <strong>@GetUserNameById(playedCard.Key):</strong> @playedCard.Value.Name
                         </div>
                     }
                 }
@@ -55,8 +55,13 @@ else
                     @foreach (var playedCard in _gameState.PlayedCards)
                     {
                         <div>
-                            <strong>@_gameState.GetPlayerName(playedCard.Key):</strong> @playedCard.Value.Name
+                            <strong>@(_ = GetUserNameById(playedCard.Key)):</strong> @playedCard.Value.Name
                         </div>
+                    }
+
+                    if (_gameState.TurnWinnerId is not null)
+                    {
+                        <div><strong>Player @GetUserNameById(_gameState.TurnWinnerId) WIN this round</strong></div>
                     }
                 }
             </div>

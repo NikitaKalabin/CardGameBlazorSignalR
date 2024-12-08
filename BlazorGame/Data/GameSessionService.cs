@@ -151,4 +151,23 @@ public class GameSessionService
                 .SendAsync("GameStateChanged", gameState);
         }
     }
+    
+    public async Task<string?> GetPlayerNameById(string userId, Guid gameId, int pinCode)
+    {
+        if (TryGetGame(gameId, pinCode, out var game))
+        {
+            try
+            {
+                var player = game.Players.FirstOrDefault(p => p.UserId == userId);
+                return player != null ? player.Name : string.Empty;
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message; // Return the error message
+            }
+        }
+
+        return "User not found or invalid PIN code.";
+    }
+    
 }

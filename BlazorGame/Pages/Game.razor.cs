@@ -175,5 +175,13 @@ namespace BlazorGame.Pages
                 _serverReference.Value.Dispose();
             }
         }
+        
+        public string GetUserNameById(string userId)
+        {
+            var playerName = _gameService.GetPlayerNameById(UserId, CurrentGameId, _gameState.PinCode).Result;
+            return playerName;
+        }
+        
+        
     }
 }
