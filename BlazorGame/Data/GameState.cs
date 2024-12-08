@@ -23,13 +23,10 @@ namespace BlazorGame.Data
         public bool HasDealtCards => _currentTurnIndex >= 0;
         public GameStatus State { get; private set; } = GameStatus.None;
         public List<Player> Players { get => _players; }
-        public Card? Upcard { get; private set; }
-        public string MatchingPlayerId { get; private set; } = "";
-        public Card? MatchingCard { get; private set; }
         public string GameCreatorId { get; init; }
         public string GameCreatorName { get; init; }
-
-
+        public bool ReadyForNextTurn => PlayedCards.Count == Players.Count;
+        public Dictionary<string, Card> PlayedCards { get; private set; } = new();
         public Game(int pinCode, Player creator, ICardProvider cardProvider)
         {
             Id = Guid.NewGuid();
@@ -40,15 +37,24 @@ namespace BlazorGame.Data
             State = GameStatus.Open;
             _cards = cardProvider.Cards();
         }
-
-        public bool IsComplete
+        public void PlayCard(string userId, Card card)
         {
-            get
+            if (PlayedCards.ContainsKey(userId))
             {
-                return HasDealtCards && Players.All(x => !x.Hand.Any());
+                throw new InvalidOperationException("Player has already played a card this turn.");
+            }
+
+            PlayedCards[userId] = card;
+            var player = Players.Single(x => x.UserId == userId);
+            player.Hand.Remove(card);
+            
+            if (ReadyForNextTurn)
+            {
+                //TODO: Implement logic for determining the winner 
             }
         }
-
+        
+        
         public string ActivePlayerId
         {
             get
@@ -69,44 +75,9 @@ namespace BlazorGame.Data
 
             if (++_currentTurnIndex == _players.Count)
                 _currentTurnIndex = 0;
+            
+            PlayedCards.Clear();
         }
-
-        internal bool TryPlayCard(string userId, Card card)
-        {
-            if (string.IsNullOrEmpty(ActivePlayerId))
-                throw new InvalidOperationException("Cards have not been dealt.");
-
-            var player = Players.Single(x => x.UserId == userId);
-            if (ActivePlayerId == userId && Upcard is null)
-            {
-                Upcard = card;
-            } else if (ActivePlayerId != userId && Upcard is not null && Upcard.Name == card.Name)
-            {
-                MatchingPlayerId = userId;
-                MatchingCard = card;
-            }
-            else
-            {
-                return false;
-            }
-
-            player.Hand.Remove(card);
-            return true;
-        }
-
-        internal void NextTurn()
-        {
-            if (Upcard is null || MatchingCard is null)
-            {
-                return;
-            }
-
-            Upcard = null;
-            MatchingCard = null;
-            _currentTurnIndex++;
-        }
-
-        
 
         public void DealCards()
         {
@@ -137,8 +108,6 @@ namespace BlazorGame.Data
 
         public Game Reset()
         {
-            Upcard = null;
-            MatchingCard = null;
             _currentTurnIndex = -1;
             return this;
         }
@@ -190,6 +159,12 @@ namespace BlazorGame.Data
             return player is null ? "" : player.Name;
         }
         
+        public Player? GetPlayerById(string userId)
+        {
+            var player = Players.FirstOrDefault(x => x.UserId == userId);
+            return player;
+        }
+      
         public string GetTurnResults(Card card1, Card card2)
         {
             if (card1.Name == card2.Name)
