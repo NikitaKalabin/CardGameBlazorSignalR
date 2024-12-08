@@ -91,21 +91,29 @@ public class GameSessionService
         return null;
     }
 
-    public async Task<bool> TryPlayCard(string userId, Card card, Guid gameId, int pinCode)
+    public async Task<string?> TryPlayCard(string userId, Card card, Guid gameId, int pinCode)
     {
         if (TryGetGame(gameId, pinCode, out var game))
         {
-            game.PlayCard(userId, card);
-            var gameState = new GameStateModel(game);
+            try
+            {
+                game.PlayCard(userId, card);
+                var gameState = new GameStateModel(game);
 
-            await _hubContext.Clients.Group(game.Id.ToString())
-                .SendAsync("GameStateChanged", gameState);
+                await _hubContext.Clients.Group(game.Id.ToString())
+                    .SendAsync("GameStateChanged", gameState);
 
-            return true;
+                return null; // No error
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message; // Return the error message
+            }
         }
 
-        return false;
+        return "Game not found or invalid PIN code.";
     }
+    
 
     private bool TryGetGame(Guid gameId, int pinCode, out Game? game)
     {

@@ -95,11 +95,14 @@ namespace BlazorGame.Pages
 
         private async Task OnCardClicked(Card card)
         {
-            if (await _gameService.TryPlayCard(UserId, card, CurrentGameId, _gameState!.PinCode)) {
-                await JS.InvokeVoidAsync("console.info", $"User played {card.Name}");
-            } else
+            var errorMessage = await _gameService.TryPlayCard(UserId, card, CurrentGameId, _gameState!.PinCode);
+            if (errorMessage != null)
             {
-                await JS.InvokeVoidAsync("console.warn", $"Cannot play {card.Name}");
+                await JS.InvokeVoidAsync("alert", errorMessage);
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("console.info", $"User played {card.Name}");
             }
         }
 
