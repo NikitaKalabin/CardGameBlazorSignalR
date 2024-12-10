@@ -16,7 +16,7 @@ else
 
     <button type="button" class="btn btn-warning mb-2" @onclick="OnLeaveGame">Leave Game</button>
 
-    <hr />
+    <hr/>
 
     //<h4 class="text-info text-center my-3">@TurnMessage</h4>
 
@@ -42,30 +42,69 @@ else
                 @if (!_gameState.ReadyForNextTurn)
                 {
                     <h5>Your Played Card:</h5>
-                    @foreach (var playedCard in _gameState.PlayedCards.Where(pc => pc.Key == UserId))
-                    {
-                        <div>
-                            <strong>@GetUserNameById(playedCard.Key):</strong> @playedCard.Value.Name
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="d-flex flex-row justify-content-center">
+                            @foreach (var playedCard in _gameState.PlayedCards.Where(pc => pc.Key == UserId))
+                            {
+                                <div class="card text-center m-2" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <PlayingCard Value="@playedCard.Value"></PlayingCard>
+                                    </div>
+                                    <div class="card-footer text-muted">
+
+                                        <em>Played by @GetUserNameById(playedCard.Key)</em>
+
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
                 }
                 else
                 {
                     <h5>Played Cards:</h5>
-                    @foreach (var playedCard in _gameState.PlayedCards)
-                    {
-                        <div>
-                            <strong>@(_ = GetUserNameById(playedCard.Key)):</strong> @playedCard.Value.Name
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="d-flex flex-row justify-content-center">
+                            @foreach (var playedCard in _gameState.PlayedCards)
+                            {
+                                <div class="card text-center m-2" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <PlayingCard Value="@playedCard.Value"></PlayingCard>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <em>Played by @GetUserNameById(playedCard.Key)</em>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
 
                     if (_gameState.TurnWinnerId is not null)
                     {
-                        <div><strong>Player @GetUserNameById(_gameState.TurnWinnerId) WIN this round</strong></div>
+                        @if (_gameState.TurnWinnerId == "-1")
+                        {
+                            <div>
+                                <strong>this time no one could win(</strong>
+                            </div>
+                        }
+                        else
+                        {
+                            @if (_gameState.TurnWinnerId == UserId)
+                            {
+                                <script>
+                                    triggerConfetti();
+                                </script>
+                            }
+
+                            <div>
+                                <strong>Player @GetUserNameById(_gameState.TurnWinnerId) WIN THIS ROUND</strong>
+                            </div>
+                        }
                     }
                 }
             </div>
         }
+
         @if (_gameState.IsComplete)
         {
             <div class="text-center mt-5">
@@ -73,6 +112,7 @@ else
                 <h5>Winner: @GetWinnerOfTheGame()</h5>
             </div>
         }
+
         @if (CanPlayAgain)
         {
             <div class="text-center">
@@ -86,7 +126,7 @@ else
             </div>
         }
     }
-    else if (CanDealCards)  
+    else if (CanDealCards)
     {
         <div class="text-center">
             <button type="button" @onclick="OnDealCards" class="mt-5 btn btn-info">Deal</button>

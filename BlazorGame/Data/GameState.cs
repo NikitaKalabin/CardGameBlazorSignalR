@@ -99,6 +99,8 @@ namespace BlazorGame.Data
         public Game Reset()
         {
             _currentTurnIndex = -1;
+            PlayedCards.Clear();
+            _players.ForEach(p => p.Points = 0);
             return this;
         }
 
