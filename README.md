@@ -1,60 +1,28 @@
-# BlazorGame
+# Card Game Blazor SignalR
 
-![Build and deploy ASP.Net Core app to Azure Web App - blazor-game](https://github.com/dneimke/BlazorGame/workflows/Build%20and%20deploy%20ASP.Net%20Core%20app%20to%20Azure%20Web%20App%20-%20blazor-game/badge.svg)
+this game implements an expanded version of rock-paper-scissors,
 
-This game is deployed here https://blazor-game.azurewebsites.net/
+## Game Rules
 
-A Blazor Server application that allows multiple players to play a game of snap across the internet.
+#### In this card game, there are five elements: Fire, Water, Ice, Lightning, and Earth. Each element has specific cards it can defeat, creating a dynamic and strategic gameplay experience.
 
-This is not a robust game, it's just a simple demo while I learn more about Blazor.
+#### Players take turns playing one card at a time. On each turn, a player selects a card from their hand and places it face up on the table. The opponent then selects a card from their hand and places it face up on the table. The winner of the round is determined based on the winning combinations:
+- Fire defeats Ice and Lightning.
+- Water defeats Fire and Lightning.
+- Ice defeats Earth and Water.
+- Lightning defeats Earth and Ice.
+- Earth defeats Fire and Water.
 
-The following steps outline the flow of the game.
-
-## Step 1 - Create New Game
-
-A user can create game a new game by supplying a username and a PIN Code.
-
-![Creating a new game](https://github.com/dneimke/blazorgame/blob/main/docs/start-new-game.png?raw=true)
-
-## Step 2 - Invite Others
-
-With the game created, an info panel is displayed with an invitation link and showing the PIN code for the game.
-
-![An info panel displays the invitation link and the PIN code](https://github.com/dneimke/blazorgame/blob/main/docs/invite-others.png?raw=true)
-
-## Step 3 - Join the Game
-
-Other users join a game from the supplied link and enter the game by providing a username and entering the PIN Code.
-
-![Multiple players in a game](https://github.com/dneimke/blazorgame/blob/main/docs/multiple-players.png?raw=true)
-
-## Step 4 - Deal the cards
-
-As soon as anybody else (other than the owner) joins the game, the owner can deal the cards.
-
-![Deal button is present when players have joined](https://github.com/dneimke/blazorgame/blob/main/docs/deal.png?raw=true)
-
-## Step 5 - The game owner leads with a card
-
-After the cards have been dealt, each player can see only their own cards. Status messages show
-which action is required. The following image shows the status message that is displayed to the user whose turn it is to play a card.
-
-![Dealt cards](https://github.com/dneimke/blazorgame/blob/main/docs/dealt-cards.png?raw=true)
-
-## Step 6 - Play a matching card
-
-After the player whose turn it was to lead has played their card, whichever player has a matching card can play it. The following image shows the status when the game is waiting for a player with a matching Panda card to play.
-
-![Waiting for matching card](https://github.com/dneimke/blazorgame/blob/main/docs/play-matching.png?raw=true)
-
-After a matching card is played, the status updates to show who played the cards for that turn.
-
-![Matched cards](https://github.com/dneimke/blazorgame/blob/main/docs/matched-cards.png?raw=true)
-
-Players now take it in turns to lead and match cards until all cards have been exhaused from the hands.
-
-## Step 7 - Play again
-
-With all hands completed, the owner is presented with an option to `Play again`
-
-![Play again](https://github.com/dneimke/blazorgame/blob/main/docs/play-again.png?raw=true)
+## Peculiar Properties of the Game
+- Real-time Communication:  
+SignalR: The game leverages SignalR for real-time communication between the server and clients. This allows for instant updates and interactions, ensuring that players see the results of their actions immediately. SignalR handles the complexities of managing WebSocket connections, providing a seamless experience.
+Component-based Architecture:  
+- Blazor: The game is built using Blazor, a framework for building interactive web UIs with C#. Blazor allows developers to create reusable components, making the codebase more maintainable and scalable. Each part of the game, such as the playing cards, game board, and score display, can be encapsulated in its own component.
+- Server-side and Client-side Blazor:  
+The game can be implemented using either Blazor Server or Blazor WebAssembly. Blazor Server provides a fast loading time and smaller payloads, as the application runs on the server. Blazor WebAssembly allows the game to run entirely in the browser, providing a more responsive experience.
+- State Management:
+C#: Using C# for both client-side and server-side logic allows for consistent state management. The game state, including player hands, scores, and game progress, can be managed efficiently using C# classes and data structures.
+- Seamless Integration:  
+ASP.NET Core: The game integrates seamlessly with ASP.NET Core, allowing for robust backend services, authentication, and data storage. This integration ensures that the game can handle multiple players, store game history, and provide secure access.
+- Cross-platform Compatibility:  
+.NET: The use of .NET technologies ensures that the game can run on various platforms, including Windows, macOS, and Linux. This cross-platform compatibility makes the game accessible to a wider audience.
